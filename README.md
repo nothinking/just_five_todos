@@ -1,6 +1,6 @@
 # Just Five Todos
 
-![앱 스크린샷](images/screenshot.png)
+![앱 스크린샷](images/ios.png)
 
 Flutter로 만든 심플하고 직관적인 Todo 앱입니다. 
 
