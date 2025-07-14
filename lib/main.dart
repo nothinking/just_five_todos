@@ -88,106 +88,184 @@ class _TodoListPageState extends State<TodoListPage> {
     final visibleCompleted = _completedTodos.take(5).toList();
     final completedCountByDay = _getCompletedCountByDay();
     return Scaffold(
+      backgroundColor: Colors.grey[100],
       appBar: AppBar(
-        title: const Text('Just Five Todos'),
+        backgroundColor: Colors.white,
+        elevation: 1,
+        centerTitle: true,
+        title: const Text(
+          'Just Five Todos',
+          style: TextStyle(
+            color: Colors.black87,
+            fontWeight: FontWeight.bold,
+            fontSize: 22,
+          ),
+        ),
+        iconTheme: const IconThemeData(color: Colors.black87),
       ),
-      body: Column(
-        children: [
-          Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: _TodoHeatmap(counts: completedCountByDay),
-          ),
-          Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: Row(
+      body: SafeArea(
+        child: SingleChildScrollView(
+          child: Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Expanded(
-                  child: TextField(
-                    controller: _controller,
-                    decoration: const InputDecoration(
-                      labelText: '할 일을 입력하세요',
-                    ),
-                    onSubmitted: (_) => _addTodo(),
-                  ),
-                ),
-                const SizedBox(width: 8),
-                ElevatedButton(
-                  onPressed: _controller.text.trim().isEmpty ? null : _addTodo,
-                  child: const Text('추가'),
-                ),
-              ],
-            ),
-          ),
-          Expanded(
-            child: ListView.builder(
-              itemCount: visibleTodos.length,
-              itemBuilder: (context, index) {
-                final todo = visibleTodos[index];
-                return ListTile(
-                  title: Text(todo.title),
-                  leading: Checkbox(
-                    value: todo.isDone,
-                    onChanged: (_) => _toggleComplete(todo),
-                  ),
-                  trailing: Row(
-                    mainAxisSize: MainAxisSize.min,
-                    children: [
-                      IconButton(
-                        icon: const Icon(Icons.arrow_downward),
-                        tooltip: '미루기',
-                        onPressed: () {
-                          setState(() {
-                            _todos.removeWhere((t) => t.id == todo.id);
-                            _todos.add(todo);
-                          });
-                        },
-                      ),
-                      IconButton(
-                        icon: const Icon(Icons.delete),
-                        onPressed: () {
-                          setState(() {
-                            _todos.removeWhere((t) => t.id == todo.id);
-                          });
-                        },
+                // const SizedBox(height: 8),
+                // const Text(
+                //   '완료한 Todo 히트맵',
+                //   style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
+                // ),
+                // const SizedBox(height: 8),
+                Container(
+                  padding: const EdgeInsets.all(12),
+                  decoration: BoxDecoration(
+                    color: Colors.white,
+                    borderRadius: BorderRadius.circular(12),
+                    boxShadow: [
+                      BoxShadow(
+                        color: Colors.black12,
+                        blurRadius: 6,
+                        offset: Offset(0, 2),
                       ),
                     ],
                   ),
-                );
-              },
-            ),
-          ),
-          if (visibleCompleted.isNotEmpty)
-            Padding(
-              padding: const EdgeInsets.symmetric(vertical: 8.0),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  const Text('완료한 일', style: TextStyle(fontWeight: FontWeight.bold)),
-                  ...visibleCompleted.map((todo) => ListTile(
+                  child: _TodoHeatmap(counts: completedCountByDay),
+                ),
+                const SizedBox(height: 24),
+                Row(
+                  children: [
+                    Expanded(
+                      child: TextField(
+                        controller: _controller,
+                        decoration: InputDecoration(
+                          labelText: '할 일을 입력하세요',
+                          filled: true,
+                          fillColor: Colors.white,
+                          border: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(12),
+                            borderSide: BorderSide.none,
+                          ),
+                          contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+                        ),
+                        onSubmitted: (_) => _addTodo(),
+                      ),
+                    ),
+                    const SizedBox(width: 8),
+                    ElevatedButton(
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: Colors.green[600],
+                        foregroundColor: Colors.white,
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(12),
+                        ),
+                        padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 16),
+                        elevation: 2,
+                      ),
+                      onPressed: _controller.text.trim().isEmpty ? null : _addTodo,
+                      child: const Text('추가', style: TextStyle(fontWeight: FontWeight.bold)),
+                    ),
+                  ],
+                ),
+                const SizedBox(height: 24),
+                // const Text(
+                //   '할 일',
+                //   style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
+                // ),
+                // const SizedBox(height: 8),
+                ...visibleTodos.map((todo) => Card(
+                      margin: const EdgeInsets.symmetric(vertical: 6),
+                      elevation: 2,
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(12),
+                      ),
+                      child: ListTile(
+                        contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 4),
                         title: Text(
                           todo.title,
-                          style: const TextStyle(
-                            decoration: TextDecoration.lineThrough,
-                            color: Colors.grey,
-                          ),
+                          style: const TextStyle(fontSize: 16),
                         ),
                         leading: Checkbox(
                           value: todo.isDone,
                           onChanged: (_) => _toggleComplete(todo),
+                          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(6)),
                         ),
-                        trailing: IconButton(
-                          icon: const Icon(Icons.delete),
-                          onPressed: () {
-                            setState(() {
-                              _completedTodos.removeWhere((t) => t.id == todo.id);
-                            });
-                          },
+                        trailing: Row(
+                          mainAxisSize: MainAxisSize.min,
+                          children: [
+                            IconButton(
+                              icon: const Icon(Icons.arrow_downward),
+                              tooltip: '미루기',
+                              onPressed: () {
+                                setState(() {
+                                  _todos.removeWhere((t) => t.id == todo.id);
+                                  _todos.add(todo);
+                                });
+                              },
+                            ),
+                            IconButton(
+                              icon: const Icon(Icons.delete),
+                              onPressed: () {
+                                setState(() {
+                                  _todos.removeWhere((t) => t.id == todo.id);
+                                });
+                              },
+                            ),
+                          ],
                         ),
-                      )),
-                ],
-              ),
+                      ),
+                    )),
+                if (visibleTodos.isEmpty)
+                  Container(
+                    margin: const EdgeInsets.symmetric(vertical: 24),
+                    alignment: Alignment.center,
+                    child: const Text('할 일을 추가해보세요!', style: TextStyle(color: Colors.grey)),
+                  ),
+                const SizedBox(height: 24),
+                if (visibleCompleted.isNotEmpty)
+                  Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      // const Divider(height: 32, thickness: 1),
+                      // const Text('완료한 일', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16)),
+                      // const SizedBox(height: 8),
+                      ...visibleCompleted.map((todo) => Card(
+                            color: Colors.grey[200],
+                            margin: const EdgeInsets.symmetric(vertical: 4),
+                            elevation: 0,
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(12),
+                            ),
+                            child: ListTile(
+                              contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 4),
+                              title: Text(
+                                todo.title,
+                                style: const TextStyle(
+                                  decoration: TextDecoration.lineThrough,
+                                  color: Colors.grey,
+                                  fontSize: 16,
+                                ),
+                              ),
+                              leading: Checkbox(
+                                value: todo.isDone,
+                                onChanged: (_) => _toggleComplete(todo),
+                                shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(6)),
+                              ),
+                              trailing: IconButton(
+                                icon: const Icon(Icons.delete),
+                                onPressed: () {
+                                  setState(() {
+                                    _completedTodos.removeWhere((t) => t.id == todo.id);
+                                  });
+                                },
+                              ),
+                            ),
+                          )),
+                    ],
+                  ),
+              ],
             ),
-        ],
+          ),
+        ),
       ),
     );
   }
@@ -199,56 +277,113 @@ class _TodoListPageState extends State<TodoListPage> {
   }
 }
 
-class _TodoHeatmap extends StatelessWidget {
+class _TodoHeatmap extends StatefulWidget {
   final Map<DateTime, int> counts;
   final int weeks;
   final int daysPerWeek;
   final int cellSize;
   final int cellPadding;
   final int maxCount;
+  final List<Color> palette;
 
   _TodoHeatmap({
     required this.counts,
-    this.weeks = 12,
+    this.weeks = 53,
     this.daysPerWeek = 7,
-    this.cellSize = 16,
+    this.cellSize = 11,
     this.cellPadding = 2,
-  }) : maxCount = counts.isEmpty ? 1 : counts.values.reduce(max);
+  })  : maxCount = counts.isEmpty ? 1 : counts.values.reduce((a, b) => a > b ? a : b),
+        palette = const [
+          Color(0xFFebedf0), // 0
+          Color(0xFF9be9a8), // 1
+          Color(0xFF40c463), // 2
+          Color(0xFF30a14e), // 3
+          Color(0xFF216e39), // 4+
+        ];
 
-  Color _colorForCount(int count) {
-    if (count == 0) return Colors.grey[200]!;
-    if (count == 1) return Colors.green[100]!;
-    if (count == 2) return Colors.green[300]!;
-    if (count == 3) return Colors.green[400]!;
-    if (count == 4) return Colors.green[600]!;
-    return Colors.green[800]!; // 5개 이상
+  @override
+  State<_TodoHeatmap> createState() => _TodoHeatmapState();
+}
+
+class _TodoHeatmapState extends State<_TodoHeatmap> {
+  final ScrollController _scrollController = ScrollController();
+
+  @override
+  void initState() {
+    super.initState();
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      if (_scrollController.hasClients) {
+        _scrollController.jumpTo(_scrollController.position.maxScrollExtent);
+      }
+    });
+  }
+
+  int _colorIndex(int count) {
+    if (count == 0) return 0;
+    if (count == 1) return 1;
+    if (count == 2) return 2;
+    if (count == 3) return 3;
+    return 4;
+  }
+
+  String _monthLabel(int month) {
+    const months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+    return months[month - 1];
   }
 
   @override
   Widget build(BuildContext context) {
     final today = DateTime.now();
-    final start = today.subtract(Duration(days: weeks * daysPerWeek - 1));
-    List<Widget> columns = [];
-    for (int w = 0; w < weeks; w++) {
+    final int weekday = today.weekday;
+    final DateTime thisMonday = today.subtract(Duration(days: weekday - 1));
+    final DateTime start = thisMonday.subtract(Duration(days: (widget.weeks - 1) * 7));
+
+    List<TableRow> rows = [];
+    for (int d = 0; d < widget.daysPerWeek; d++) {
       List<Widget> cells = [];
-      for (int d = 0; d < daysPerWeek; d++) {
-        final day = start.add(Duration(days: w * daysPerWeek + d));
-        final count = counts[DateTime(day.year, day.month, day.day)] ?? 0;
-        cells.add(Container(
-          width: cellSize.toDouble(),
-          height: cellSize.toDouble(),
-          margin: EdgeInsets.all(cellPadding.toDouble()),
-          decoration: BoxDecoration(
-            color: _colorForCount(count),
-            borderRadius: BorderRadius.circular(3),
-          ),
-        ));
+      for (int w = 0; w < widget.weeks; w++) {
+        final day = start.add(Duration(days: w * widget.daysPerWeek + d));
+        if (day.isAfter(today)) {
+          cells.add(const SizedBox.shrink());
+        } else {
+          final count = widget.counts[DateTime(day.year, day.month, day.day)] ?? 0;
+          cells.add(Tooltip(
+            message: '${day.year}-${day.month.toString().padLeft(2, '0')}-${day.day.toString().padLeft(2, '0')}: $count개 완료',
+            child: Container(
+              width: widget.cellSize.toDouble(),
+              height: widget.cellSize.toDouble(),
+              margin: EdgeInsets.all(widget.cellPadding.toDouble()),
+              decoration: BoxDecoration(
+                color: widget.palette[_colorIndex(count)],
+                borderRadius: BorderRadius.circular(2),
+              ),
+            ),
+          ));
+        }
       }
-      columns.add(Column(children: cells));
+      rows.add(TableRow(children: cells));
     }
-    return SingleChildScrollView(
-      scrollDirection: Axis.horizontal,
-      child: Row(children: columns),
+
+    return LayoutBuilder(
+      builder: (context, constraints) {
+        return SingleChildScrollView(
+          controller: _scrollController,
+          scrollDirection: Axis.horizontal,
+          child: ConstrainedBox(
+            constraints: BoxConstraints(minWidth: constraints.maxWidth),
+            child: Table(
+              defaultColumnWidth: IntrinsicColumnWidth(),
+              children: rows,
+            ),
+          ),
+        );
+      },
     );
+  }
+
+  @override
+  void dispose() {
+    _scrollController.dispose();
+    super.dispose();
   }
 }
