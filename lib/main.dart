@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'dart:math';
+import 'package:shared_preferences/shared_preferences.dart';
+import 'dart:convert';
 
 void main() {
   runApp(const MyApp());
@@ -28,6 +30,20 @@ class Todo {
   DateTime? completedAt;
 
   Todo({required this.id, required this.title, this.isDone = false, this.completedAt});
+
+  Map<String, dynamic> toJson() => {
+    'id': id,
+    'title': title,
+    'isDone': isDone,
+    'completedAt': completedAt?.toIso8601String(),
+  };
+
+  factory Todo.fromJson(Map<String, dynamic> json) => Todo(
+    id: json['id'],
+    title: json['title'],
+    isDone: json['isDone'] ?? false,
+    completedAt: json['completedAt'] != null ? DateTime.parse(json['completedAt']) : null,
+  );
 }
 
 class TodoListPage extends StatefulWidget {
@@ -52,7 +68,34 @@ class _TodoListPageState extends State<TodoListPage> {
         _canAdd = _controller.text.trim().isNotEmpty;
       });
     });
+    _loadTodos();
   }
+
+  Future<void> _loadTodos() async {
+    final prefs = await SharedPreferences.getInstance();
+    final todosJson = prefs.getStringList('todos') ?? [];
+    final completedJson = prefs.getStringList('completedTodos') ?? [];
+    setState(() {
+      _todos.clear();
+      _todos.addAll(todosJson.map((e) => Todo.fromJson(jsonDecode(e))));
+      _completedTodos.clear();
+      _completedTodos.addAll(completedJson.map((e) => Todo.fromJson(jsonDecode(e))));
+      if (_todos.isNotEmpty) {
+        _nextId = _todos.map((t) => t.id).reduce((a, b) => a > b ? a : b) + 1;
+      } else if (_completedTodos.isNotEmpty) {
+        _nextId = _completedTodos.map((t) => t.id).reduce((a, b) => a > b ? a : b) + 1;
+      }
+    });
+  }
+
+  Future<void> _saveTodos() async {
+    final prefs = await SharedPreferences.getInstance();
+    await prefs.setStringList('todos', _todos.map((t) => jsonEncode(t.toJson())).toList());
+    await prefs.setStringList('completedTodos', _completedTodos.map((t) => jsonEncode(t.toJson())).toList());
+  }
+
+  String _encodeJson(Map<String, dynamic> map) => jsonEncode(map);
+  Map<String, dynamic> _decodeJson(String s) => jsonDecode(s);
 
   void _addTodo() {
     final text = _controller.text.trim();
@@ -61,6 +104,7 @@ class _TodoListPageState extends State<TodoListPage> {
         _todos.insert(0, Todo(id: _nextId++, title: text));
         _controller.clear();
       });
+      _saveTodos();
     }
   }
 
@@ -80,6 +124,7 @@ class _TodoListPageState extends State<TodoListPage> {
         _todos.insert(0, todo);
       }
     });
+    _saveTodos();
   }
 
   Map<DateTime, int> _getCompletedCountByDay() {
@@ -211,6 +256,7 @@ class _TodoListPageState extends State<TodoListPage> {
                                   _todos.removeWhere((t) => t.id == todo.id);
                                   _todos.add(todo);
                                 });
+                                _saveTodos();
                               },
                             ),
                             IconButton(
@@ -219,6 +265,7 @@ class _TodoListPageState extends State<TodoListPage> {
                                 setState(() {
                                   _todos.removeWhere((t) => t.id == todo.id);
                                 });
+                                _saveTodos();
                               },
                             ),
                           ],
@@ -267,6 +314,7 @@ class _TodoListPageState extends State<TodoListPage> {
                                   setState(() {
                                     _completedTodos.removeWhere((t) => t.id == todo.id);
                                   });
+                                  _saveTodos();
                                 },
                               ),
                             ),
