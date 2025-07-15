@@ -1,0 +1,478 @@
+<!DOCTYPE html>
+<html lang="ko" data-theme="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Google Play Console 앱 등록 및 출시 가이드</title>
+    <style>
+        body {
+            max-width: 880px;
+            margin: 0 auto;
+            padding: 32px 80px;
+            position: relative;
+            box-sizing: border-box;
+            font-family: 'Times New Roman', serif;
+            line-height: 1.6;
+            color: #000;
+            background: #fff;
+            text-align: justify;
+        }
+        
+        h1 {
+            font-size: 20px;
+            font-weight: bold;
+            text-align: center;
+            margin: 0 0 32px 0;
+            page-break-before: avoid;
+        }
+        
+        h2 {
+            font-size: 16px;
+            font-weight: bold;
+            margin: 24px 0 16px 0;
+            page-break-after: avoid;
+        }
+        
+        h3 {
+            font-size: 14px;
+            font-weight: bold;
+            margin: 20px 0 12px 0;
+            page-break-after: avoid;
+        }
+        
+        h4 {
+            font-size: 12px;
+            font-weight: bold;
+            margin: 16px 0 8px 0;
+            page-break-after: avoid;
+        }
+        
+        p {
+            margin: 0 0 12px 0;
+            text-indent: 0;
+        }
+        
+        ul, ol {
+            margin: 12px 0 12px 24px;
+            padding-left: 0;
+        }
+        
+        li {
+            margin: 4px 0;
+        }
+        
+        .warning {
+            background-color: #fff2cc;
+            border: 1px solid #d6b656;
+            padding: 12px;
+            margin: 16px 0;
+            font-weight: bold;
+        }
+        
+        .info {
+            background-color: #d1ecf1;
+            border: 1px solid #bee5eb;
+            padding: 12px;
+            margin: 16px 0;
+        }
+        
+        .step {
+            margin: 16px 0;
+            padding-left: 20px;
+        }
+        
+        .checklist {
+            background-color: #f8f9fa;
+            border: 1px solid #dee2e6;
+            padding: 12px;
+            margin: 16px 0;
+        }
+        
+        table {
+            border-collapse: collapse;
+            width: 100%;
+            margin: 16px 0;
+        }
+        
+        th, td {
+            border: 1px solid #000;
+            padding: 8px;
+            text-align: left;
+        }
+        
+        th {
+            background-color: #f2f2f2;
+            font-weight: bold;
+        }
+        
+        .code {
+            font-family: 'Courier New', monospace;
+            background-color: #f8f8f8;
+            padding: 2px 4px;
+            border: 1px solid #ddd;
+        }
+    </style>
+</head>
+<body>
+    <h1>Google Play Console 앱 등록 및 출시 가이드</h1>
+    
+    <h2>1. 개요</h2>
+    <p>Google Play Console은 Android 앱을 Google Play 스토어에 등록하고 관리하는 플랫폼입니다. 앱을 성공적으로 출시하기 위해서는 내부 테스트부터 프로덕션 출시까지의 단계적 과정을 거쳐야 합니다.</p>
+    
+    <div class="warning">
+        <p><strong>중요:</strong> 2023년 11월 13일 이후 생성된 개인 개발자 계정은 새로운 테스트 요구사항을 충족해야 합니다. 최소 12명의 테스터가 14일 연속으로 비공개 테스트에 참여해야 프로덕션 출시가 가능합니다.</p>
+    </div>
+    
+    <h2>2. 사전 준비사항</h2>
+    
+    <h3>2.1 Google 개발자 계정 생성</h3>
+    <div class="step">
+        <ol>
+            <li>Google Play Console (<span class="code">https://play.google.com/console/</span>)에 접속</li>
+            <li>Google 계정으로 로그인</li>
+            <li>개발자 계정 유형 선택 (개인 또는 조직)</li>
+            <li>개발자 등록 수수료 $25 결제</li>
+            <li>개발자 계정 인증 완료</li>
+        </ol>
+    </div>
+    
+    <h3>2.2 앱 개발 완료 요소</h3>
+    <div class="checklist">
+        <p><strong>체크리스트:</strong></p>
+        <ul>
+            <li>APK 또는 AAB (Android App Bundle) 파일</li>
+            <li>앱 아이콘 (512x512 픽셀)</li>
+            <li>스크린샷 (최소 2개, 최대 8개)</li>
+            <li>앱 설명 (간단한 설명, 자세한 설명)</li>
+            <li>개인정보처리방침 URL</li>
+            <li>앱 카테고리 및 태그</li>
+            <li>콘텐츠 등급 설정</li>
+        </ul>
+    </div>
+    
+    <h2>3. 1단계: 앱 생성 및 기본 설정</h2>
+    
+    <h3>3.1 새 앱 만들기</h3>
+    <div class="step">
+        <ol>
+            <li>Play Console 메인 화면에서 "앱 만들기" 클릭</li>
+            <li>앱 이름 입력</li>
+            <li>기본 언어 선택</li>
+            <li>앱 또는 게임 선택</li>
+            <li>무료 또는 유료 선택</li>
+            <li>Play 개발자 프로그램 정책 동의</li>
+            <li>"앱 만들기" 버튼 클릭</li>
+        </ol>
+    </div>
+    
+    <h3>3.2 앱 정보 입력</h3>
+    <div class="step">
+        <ol>
+            <li><strong>메인 스토어 등록정보:</strong>
+                <ul>
+                    <li>앱 이름 및 간단한 설명</li>
+                    <li>자세한 설명</li>
+                    <li>앱 아이콘 업로드</li>
+                    <li>스크린샷 업로드</li>
+                </ul>
+            </li>
+            <li><strong>스토어 설정:</strong>
+                <ul>
+                    <li>앱 카테고리</li>
+                    <li>태그 (선택사항)</li>
+                    <li>연락처 정보</li>
+                    <li>외부 마케팅 선택사항</li>
+                </ul>
+            </li>
+            <li><strong>앱 콘텐츠:</strong>
+                <ul>
+                    <li>개인정보처리방침</li>
+                    <li>앱 액세스 권한</li>
+                    <li>데이터 보안</li>
+                    <li>광고 포함 여부</li>
+                    <li>콘텐츠 등급</li>
+                    <li>타겟 고객 및 콘텐츠</li>
+                </ul>
+            </li>
+        </ol>
+    </div>
+    
+    <h2>4. 2단계: 내부 테스트</h2>
+    
+    <h3>4.1 내부 테스트 개요</h3>
+    <p>내부 테스트는 최대 100명의 테스터를 대상으로 하는 초기 테스트 단계입니다. 개발팀 내부에서 빠른 피드백을 받기 위해 사용합니다.</p>
+    
+    <div class="info">
+        <p><strong>내부 테스트 특징:</strong></p>
+        <ul>
+            <li>최대 100명 테스터</li>
+            <li>빠른 배포 (몇 분 내)</li>
+            <li>앱 설정 완료 전에도 가능</li>
+            <li>국가 제한 없음</li>
+            <li>유료 앱도 무료 설치 가능</li>
+        </ul>
+    </div>
+    
+    <h3>4.2 내부 테스트 설정</h3>
+    <div class="step">
+        <ol>
+            <li>Play Console → 테스트 → 내부 테스트</li>
+            <li>새 버전 만들기 클릭</li>
+            <li>AAB 또는 APK 파일 업로드</li>
+            <li>버전 이름 및 출시 노트 입력</li>
+            <li>테스터 탭에서 이메일 목록 만들기</li>
+            <li>테스터 이메일 주소 추가 (쉼표로 구분)</li>
+            <li>의견 수집 채널 입력 (이메일 또는 URL)</li>
+            <li>변경사항 저장 후 버전 검토</li>
+            <li>내부 테스트 시작</li>
+        </ol>
+    </div>
+    
+    <h3>4.3 내부 테스트 진행</h3>
+    <div class="step">
+        <ol>
+            <li>테스터에게 테스트 링크 공유</li>
+            <li>테스터가 Google 계정으로 테스트 참여</li>
+            <li>앱 설치 및 테스트 진행</li>
+            <li>피드백 수집 및 버그 수정</li>
+            <li>필요시 새 버전 업로드</li>
+        </ol>
+    </div>
+    
+    <h2>5. 3단계: 비공개 테스트</h2>
+    
+    <h3>5.1 비공개 테스트 개요</h3>
+    <p>비공개 테스트는 프로덕션 출시 전 필수 단계입니다. 2023년 11월 13일 이후 생성된 개인 개발자 계정의 경우, 최소 12명의 테스터가 14일 연속으로 참여해야 합니다.</p>
+    
+    <div class="warning">
+        <p><strong>신규 개발자 계정 필수 요구사항:</strong></p>
+        <ul>
+            <li>최소 12명의 테스터</li>
+            <li>14일 연속 테스트 참여</li>
+            <li>테스터는 실제로 앱을 사용해야 함</li>
+            <li>요구사항 충족 후 프로덕션 액세스 신청 가능</li>
+        </ul>
+    </div>
+    
+    <h3>5.2 비공개 테스트 설정</h3>
+    <div class="step">
+        <ol>
+            <li>Play Console → 테스트 → 비공개 테스트</li>
+            <li>트랙 관리 → 새 버전 만들기</li>
+            <li>AAB 또는 APK 파일 업로드</li>
+            <li>버전 정보 입력</li>
+            <li>테스터 탭에서 이메일 목록 만들기</li>
+            <li>최소 12명 이상의 테스터 이메일 추가</li>
+            <li>의견 수집 채널 설정</li>
+            <li>비공개 테스트 시작</li>
+        </ol>
+    </div>
+    
+    <h3>5.3 테스터 모집 방법</h3>
+    <div class="step">
+        <ul>
+            <li>친구, 가족, 동료에게 요청</li>
+            <li>소셜 미디어를 통한 모집</li>
+            <li>개발자 커뮤니티 활용</li>
+            <li>타겟 사용자 그룹 접촉</li>
+            <li>온라인 테스터 모집 게시판 활용</li>
+        </ul>
+    </div>
+    
+    <h3>5.4 비공개 테스트 진행 및 관리</h3>
+    <div class="step">
+        <ol>
+            <li>테스터에게 참여 링크 공유</li>
+            <li>테스터가 Google 계정으로 참여 신청</li>
+            <li>14일간 지속적인 테스트 참여 유지</li>
+            <li>테스터 참여 현황 모니터링</li>
+            <li>피드백 수집 및 앱 개선</li>
+            <li>필요시 버그 수정 버전 업로드</li>
+        </ol>
+    </div>
+    
+    <h2>6. 4단계: 공개 테스트 (선택사항)</h2>
+    
+    <h3>6.1 공개 테스트 개요</h3>
+    <p>공개 테스트는 더 많은 사용자를 대상으로 하는 테스트 단계입니다. Google Play에서 누구나 찾을 수 있으며, 프로덕션 출시 전 마지막 테스트 단계입니다.</p>
+    
+    <h3>6.2 공개 테스트 설정</h3>
+    <div class="step">
+        <ol>
+            <li>Play Console → 테스트 → 공개 테스트</li>
+            <li>새 버전 만들기</li>
+            <li>AAB 또는 APK 파일 업로드</li>
+            <li>테스터 수 제한 설정 (무제한 또는 제한)</li>
+            <li>의견 수집 채널 설정</li>
+            <li>공개 테스트 시작</li>
+        </ol>
+    </div>
+    
+    <h2>7. 5단계: 프로덕션 액세스 신청</h2>
+    
+    <h3>7.1 프로덕션 액세스 신청 조건</h3>
+    <div class="checklist">
+        <p><strong>신청 전 확인사항:</strong></p>
+        <ul>
+            <li>12명 이상의 테스터가 14일 연속 비공개 테스트 참여</li>
+            <li>테스터들이 실제로 앱을 사용하고 피드백 제공</li>
+            <li>주요 버그 수정 완료</li>
+            <li>앱 콘텐츠 및 정책 준수 확인</li>
+        </ul>
+    </div>
+    
+    <h3>7.2 프로덕션 액세스 신청 과정</h3>
+    <div class="step">
+        <ol>
+            <li>Play Console → 대시보드</li>
+            <li>"프로덕션 신청" 클릭</li>
+            <li><strong>1부: 비공개 테스트 정보</strong>
+                <ul>
+                    <li>테스터 모집 경험</li>
+                    <li>테스터 참여도 설명</li>
+                    <li>받은 피드백 요약</li>
+                </ul>
+            </li>
+            <li><strong>2부: 앱/게임 정보</strong>
+                <ul>
+                    <li>주요 사용자층 설명</li>
+                    <li>앱이 제공하는 가치</li>
+                    <li>예상 설치 수</li>
+                </ul>
+            </li>
+            <li><strong>3부: 프로덕션 준비 상태</strong>
+                <ul>
+                    <li>테스트 기반 개선사항</li>
+                    <li>프로덕션 준비 완료 근거</li>
+                </ul>
+            </li>
+            <li>신청서 제출</li>
+        </ol>
+    </div>
+    
+    <h3>7.3 심사 및 결과</h3>
+    <p>신청서 제출 후 Google에서 검토를 진행하며, 일반적으로 7일 이내에 결과를 이메일로 통보합니다. 승인되면 프로덕션 트랙에 접근할 수 있습니다.</p>
+    
+    <h2>8. 6단계: 프로덕션 출시</h2>
+    
+    <h3>8.1 프로덕션 출시 준비</h3>
+    <div class="step">
+        <ol>
+            <li>최종 버전 준비</li>
+            <li>스토어 등록정보 최종 검토</li>
+            <li>출시 국가 선택</li>
+            <li>가격 정책 설정</li>
+            <li>배포 옵션 설정</li>
+        </ol>
+    </div>
+    
+    <h3>8.2 프로덕션 출시 진행</h3>
+    <div class="step">
+        <ol>
+            <li>Play Console → 테스트 및 출시 → 프로덕션</li>
+            <li>새 버전 만들기</li>
+            <li>최종 AAB 또는 APK 파일 업로드</li>
+            <li>출시 노트 작성</li>
+            <li>출시 백분율 설정 (점진적 출시)</li>
+            <li>버전 검토 및 프로덕션 출시</li>
+        </ol>
+    </div>
+    
+    <h2>9. 출시 후 관리</h2>
+    
+    <h3>9.1 모니터링 및 분석</h3>
+    <div class="step">
+        <ul>
+            <li>Google Play Console 통계 확인</li>
+            <li>사용자 리뷰 및 평점 모니터링</li>
+            <li>크래시 보고서 확인</li>
+            <li>사용자 획득 및 참여 분석</li>
+            <li>수익 분석 (유료 앱의 경우)</li>
+        </ul>
+    </div>
+    
+    <h3>9.2 업데이트 및 유지보수</h3>
+    <div class="step">
+        <ol>
+            <li>정기적인 앱 업데이트</li>
+            <li>버그 수정 및 기능 개선</li>
+            <li>사용자 피드백 반영</li>
+            <li>새로운 Android 버전 호환성 유지</li>
+            <li>보안 업데이트 적용</li>
+        </ol>
+    </div>
+    
+    <h2>10. 주의사항 및 팁</h2>
+    
+    <h3>10.1 정책 준수</h3>
+    <div class="warning">
+        <p><strong>Google Play 정책 준수 필수사항:</strong></p>
+        <ul>
+            <li>콘텐츠 정책 준수</li>
+            <li>개인정보보호 정책 준수</li>
+            <li>타겟 API 레벨 요구사항 충족</li>
+            <li>앱 서명 및 보안 요구사항 준수</li>
+            <li>스팸 방지 정책 준수</li>
+        </ul>
+    </div>
+    
+    <h3>10.2 성공적인 출시를 위한 팁</h3>
+    <div class="step">
+        <ul>
+            <li>충분한 테스트 기간 확보</li>
+            <li>다양한 디바이스에서 테스트</li>
+            <li>사용자 피드백 적극 반영</li>
+            <li>앱 스토어 최적화 (ASO) 적용</li>
+            <li>점진적 출시 활용</li>
+            <li>지속적인 모니터링 및 개선</li>
+        </ul>
+    </div>
+    
+    <h2>11. 문제 해결</h2>
+    
+    <h3>11.1 일반적인 문제들</h3>
+    <table>
+        <tr>
+            <th>문제</th>
+            <th>원인</th>
+            <th>해결방법</th>
+        </tr>
+        <tr>
+            <td>테스터 12명 미달</td>
+            <td>테스터 모집 부족</td>
+            <td>추가 테스터 모집, 지인 활용</td>
+        </tr>
+        <tr>
+            <td>14일 연속 참여 미달</td>
+            <td>테스터 이탈</td>
+            <td>테스터와 지속적 소통, 리마인드</td>
+        </tr>
+        <tr>
+            <td>앱 심사 거부</td>
+            <td>정책 위반</td>
+            <td>정책 재검토, 수정 후 재신청</td>
+        </tr>
+        <tr>
+            <td>업로드 실패</td>
+            <td>파일 포맷 오류</td>
+            <td>AAB 포맷 사용, 서명 확인</td>
+        </tr>
+    </table>
+    
+    <h3>11.2 고객 지원 및 리소스</h3>
+    <div class="step">
+        <ul>
+            <li>Google Play Console 도움말 센터</li>
+            <li>Android 개발자 문서</li>
+            <li>Google Play 개발자 커뮤니티</li>
+            <li>Stack Overflow 개발자 포럼</li>
+            <li>Google Play 지원팀 연락</li>
+        </ul>
+    </div>
+    
+    <h2>12. 결론</h2>
+    <p>Google Play Console을 통한 앱 출시는 체계적인 준비와 단계별 접근이 필요합니다. 특히 2023년 11월 이후 강화된 테스트 요구사항을 충족하기 위해서는 충분한 시간과 준비가 필요합니다. 이 가이드를 참고하여 성공적인 앱 출시를 진행하시기 바랍니다.</p>
+    
+    <p>앱 출시는 시작일 뿐이며, 지속적인 업데이트와 사용자 피드백 반영을 통해 앱의 품질을 개선해 나가는 것이 중요합니다.</p>
+</body>
+</html>
