@@ -42,6 +42,17 @@ class _TodoListPageState extends State<TodoListPage> {
   final List<Todo> _completedTodos = [];
   final TextEditingController _controller = TextEditingController();
   int _nextId = 1;
+  bool _canAdd = false;
+
+  @override
+  void initState() {
+    super.initState();
+    _controller.addListener(() {
+      setState(() {
+        _canAdd = _controller.text.trim().isNotEmpty;
+      });
+    });
+  }
 
   void _addTodo() {
     final text = _controller.text.trim();
@@ -161,7 +172,7 @@ class _TodoListPageState extends State<TodoListPage> {
                         padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 16),
                         elevation: 2,
                       ),
-                      onPressed: _controller.text.trim().isEmpty ? null : _addTodo,
+                      onPressed: _canAdd ? _addTodo : null,
                       child: const Text('추가', style: TextStyle(fontWeight: FontWeight.bold)),
                     ),
                   ],
