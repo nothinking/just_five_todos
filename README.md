@@ -83,6 +83,12 @@ flutter run
 > - versionCode(+)는 항상 이전보다 큰 값이어야 구글 플레이 콘솔에서 업로드가 가능합니다.
 > - iOS는 version:의 앞부분(1.0.0)이 CFBundleShortVersionString, 뒷부분(1)이 CFBundleVersion에 반영됩니다.
 
+### 아이콘 만들기
+- https://icon.kitchen/
+
+### 스크린샷 만들기
+- https://previewed.app/
+
 ## 폴더 구조
 - `lib/main.dart` : 앱의 메인 로직 및 UI
 - `test/` : 위젯 테스트 예시
